@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% include "navbar.html" %}
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0">
+</head>
+<style>
+    body {
+   display: flex;
+   min-height: 100vh;
+   flex-direction: column;
+ }
+
+ .main {
+   flex: 1 0 auto;
+ }
+</style>
+
+<body background="{% static '/campus.png' %}" style="background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
+     
+    {% if estudiante %}
+        {% for estudiante in estudiante %}
+            {% if estudiante and groups == 'admin'  %}  
+                <div class="main">
+                    <div style="background-color: white;">
+                        <div class="container">
+                            <div class="divider"></div>
+                            <div class="section"> 
+                                <h3>ESTUDIO SOCIOECONOMICO UEES</h3>
+                                <a href="estudio/" class="waves-effect waves-light btn">Solicitar</a>
+                                <a href="ver_estudio/" class="waves-effect waves-light btn">Ver estudio</a>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% elif estudiante and estudiante.estado == 1 %}
+                <div class="main">
+                    <div style="background-color: white;">
+                        <div class="container">
+                            <div class="divider"></div>
+                            <div class="section"> 
+                                <h3>ESTUDIO SOCIOECONOMICO UEES</h3>
+                                <a href="estudio/" class="waves-effect waves-light btn disabled">Solicitar</a>
+                                <a href="ver_estudio/" class="waves-effect waves-light btn">Ver estudio</a>
+                                <a href="calcular_cuota/" class="waves-effect waves-light btn">Ver proceso de asignación de cuota</a>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% elif estudiante and estudiante.estado == 2 or estudiante.estado == 3 %}
+                <div class="main">
+                    <div style="background-color: white;">
+                        <div class="container">
+                            <div class="divider"></div>
+                            <div class="section"> 
+                                <h3>ESTUDIO SOCIOECONOMICO UEES</h3>
+                                <a href="estudio/" class="waves-effect waves-light btn disabled">Solicitar</a>
+                                <a href="ver_estudio/" class="waves-effect waves-light btn">Ver estudio</a>
+                                <a href="ver_cuota/" class="waves-effect waves-light btn">Ver proceso de asignación de cuota</a>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            
+
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="main">
+            <div style="background-color: white;">
+                <div class="container">
+                    <div class="divider"></div>
+                    <div class="section">
+                        <h3>ESTUDIO SOCIOECONOMICO UEES</h3>
+                        <a href="estudio/" class="waves-effect waves-light btn">Solicitar</a>
+                        <a href="ver_estudio/" class="waves-effect waves-light btn disabled">Ver estudio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+   
+</body>
+{% include "footer.html" %}
+</html>

@@ -1,0 +1,1030 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static '/arriba.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/mstepper.css' %}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="{% static '/arriba.js' %}"></script>   
+    <script language="JavaScript" type="text/javascript" src="{% static '/mstepper.js' %}"></script>
+    <script type="text/javascript">
+		function valideKey(evt){
+			
+			// code is the decimal ASCII representation of the pressed key.
+			var code = (evt.which) ? evt.which : evt.keyCode;
+			
+			if(code==8) { // backspace.
+			  return true;
+			} else if(code>=48 && code<=57) { // is a number.
+			  return true;
+			} else{ // other keys.
+			  return false;
+			}
+		}
+    </script>
+    <script>
+        
+        function filterFloat(evt,input)
+        {
+            // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
+            var key = window.Event ? evt.which : evt.keyCode;    
+            var chark = String.fromCharCode(key);
+            var tempValue = input.value+chark;
+            if(key >= 48 && key <= 57){
+                if(filter(tempValue)=== false){
+                    return false;
+                }else{       
+                    return true;
+                }
+            }else{
+                if(key == 8 || key == 13 || key == 0) {     
+                    return true;              
+                }else if(key == 46){
+                        if(filter(tempValue)=== false){
+                            return false;
+                        }else{       
+                            return true;
+                        }
+                }else{
+                    return false;
+                }
+            }
+        }
+        function filter(__val__)
+        {
+            var preg = /^([0-9]+\.?[0-9]{0,2})$/; 
+            if(preg.test(__val__) === true){
+                return true;
+            }else{
+            return false;
+            }
+            
+        }
+
+    </script>
+    {%  include "navbar.html" %}
+</head>
+<body>
+    
+    <div class="container">
+        <form action="../registro_estudio/"  method="POST" class="col s12">
+            <ul class="stepper horizontal">
+                <li class="step active">
+                    <div class="step-title waves-effect">DATOS GENERALES DEL ESTUDIANTE</div>
+                    <div class="step-content">
+                        <H3>DATOS GENERALES DEL ESTUDIANTE</H3>
+                        <br><br>
+                        {% csrf_token %}
+                        <div class="row">  
+                            <div class="row">
+                                <div class="input-field col s4">
+                                    <input placeholder="Ingrese su primer apellido" name="primer_apellido" id="primer_apellido" type="text" class="validate" required>
+                                    <label for="primer_apellido">Primer apellido</label>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input placeholder="Ingrese su segundo apellido" id="segundo_apellido" name="segundo_apellido" type="text" class="validate" required>
+                                    <label for="segundo_apellido">Segundo apellido</label>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input placeholder="Ingrese sus nombres" id="nombre_estudiante" name="nombre_estudiante" type="text" class="validate" required>
+                                    <label for="nombre_estudiante">Nombres</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <textarea placeholder="Inbrese su dirección" name="direccion_exacta" id="direccion_exacta" class="materialize-textarea"></textarea required>
+                                    <label for="direccion_exacta">Dirección</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input placeholder="Ingrese el numero de su telefono de casa" id="telefono_fijo" name="telefono_fijo" type="text" class="validate" onkeypress="return valideKey(event);" maxlength="8">
+                                    <label for="telefono_fijo">Teléfono fijo</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input placeholder="Ingrese su numero de celular" id="celular" name="celular" type="text" class="validate" onkeypress="return valideKey(event);" maxlength="8">
+                                    <label for="celular">Cel</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input placeholder="Ingrese su correo electrónico" id="email" name="email" type="text" class="validate" required>
+                                    <label for="email">Correo Electrónico</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12" required>
+                                    <h6><b>Vive en:</b></h6>
+                                </div>
+                            </div>
+                            <p>
+                                <label class="col s4">
+                                    <input name="vive_en" id="vive_en" value="Casa propia mayor a 50,000" type="radio" checked />
+                                    <span>Casa propia mayor a 50,000</span>
+                                </label>
+                                <label class="col s4">
+                                    <input name="vive_en" value="Casa propia entre 20,000 y 50,000" id="vive_en" type="radio" />
+                                    <span>Casa propia entre 20,000 y 50,000</span>
+                                </label>
+                                <label class="col s4">
+                                    <input name="vive_en" value="Casa propia menor a 20,000" id="vive_en" type="radio" />
+                                    <span>Casa propia menor a 20,000</span>
+                                </label>
+                            </p>
+                            <br><br>
+                            <p>
+                                <label class="col s4">
+                                    <input name="vive_en" id="vive_en" value="Alquiler más de 750" type="radio" />
+                                    <span>Alquiler más de 750</span>
+                                </label>
+                                <label class="col s4">
+                                    <input name="vive_en" id="vive_en" value="Alquiler menos de 750" type="radio" />
+                                    <span>Alquiler menos de 750</span>
+                                </label>
+                            </p>
+                            <br><br>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h6><b>Vive con:</b></h6>
+                                </div>
+                            </div>
+                            <p>
+                                <label class="col s4">
+                                    <input type="radio" name="vive_con" id="vive_con" value="Grupo Familiar" checked>
+                                    <span>Grupo Familiar</span>
+                                </label>
+                                <label class="col s4">
+                                    <input type="radio" name="vive_con" id="vive_con" value="Padre o Madre">
+                                    <span>Padre o Madre</span>
+                                </label>
+                                <label class="col s4">
+                                    <input type="radio" name="vive_con" id="vive_con" value="Con abuelos">
+                                    <span>Con abuelos</span>
+                                </label>
+                            </p>
+                            <br><br>
+                            <p>
+                                <label class="col s4">
+                                    <input type="radio" name="vive_con" id="vive_con" value="Solo">
+                                    <span>Solo</span>
+                                </label>
+                            </p>
+                            <br><br>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h6><b>Estado Civil:</b></h6>
+                                </div>
+                            </div>
+                            <p>
+                                <label class="col s3">
+                                    <input type="radio" name="estado_civil" id="estado_civil" value="Soltero(a)" checked>
+                                    <span>Soltero(a)</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="estado_civil" id="estado_civil" value="Casado(a)">
+                                    <span>Casado(a)</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="estado_civil" id="estado_civil" value="Acompañado(a)">
+                                    <span>Acompañado(a)</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="estado_civil" id="estado_civil" value="Divorciado(a)">
+                                    <span>Divorciado(a)</span>
+                                </label>
+                            </p>
+                            <br><br><br>
+                            <div class="input-field col s12">
+                                <textarea placeholder="Inbrese el lugar de nacimiento" name="lugar_nacimiento" id="lugar_nacimiento" class="materialize-textarea" required></textarea>
+                                <label for="lugar_nacimiento">Lugar de nacimiento</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <input placeholder="Fecha"  type="text" name="fecha_nacimiento" class="datepickers" id="fecha" required>
+                                <label for="fecha_nacimiento">Ingrese la fecha de nacimiento</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input placeholder="Ingrese su edad" type="text" name="edad_estudiante" id="edad_estudiante" onkeypress="return valideKey(event);" maxlength="2" required>
+                                <label for="edad_estudiante">Edad</label>
+                            </div> 
+                                <div class="input-field col s3">
+                                <input value="{{ id }}" type="text" name="usuario_id" id="usuario_id" hidden>
+                            </div>
+                            <div class="input-field col s12">
+                                <select name="nombre_carrera" id="nombre_carrera" required>
+                                    <option value="" disabled selected>Seleccione la carreara en la que se incribirá</option>
+                                    <option value="Licenciatura  en Psicología">Licenciatura  en Psicología</option>
+                                    <option value="Ingenieria en sistemas informaticos">Ingenieria en sistemas informaticos</option>
+                                    <option value="Profesorado  y Licenciatura  en Educación Inicial y Parvularia">Profesorado  y Licenciatura  en Educación Inicial y Parvularia</option>
+                                    <option value="Licenciatura  en Ciencias Jurídicas">Licenciatura  en Ciencias Jurídicas</option>
+                                    <option value="Licenciatura en Relaciones y Negocios Internaciones">Licenciatura en Relaciones y Negocios Internaciones</option>
+                                    <option value="	Licenciatura en Administración de Empresas">Licenciatura en Administración de Empresas</option>
+                                    <option value="Licenciatura  en Mercadotecnia">Licenciatura  en Mercadotecnia</option>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h6><b>Titulo con que cuenta:</b></h6>
+                                </div>
+                            </div>
+                            <p>
+                                <label class="col s3">
+                                    <input type="radio" name="tipo_titulo" id="tipo_titulo" value="Bachiller" checked>
+                                    <span>Bachiller</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="tipo_titulo" id="tipo_titulo" value="Técnico">
+                                    <span>Técnico</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="tipo_titulo" id="tipo_titulo" value="Licenciado(a)">
+                                    <span>Licenciado(a)</span>
+                                </label>
+                            </p>
+                            <br><br><br>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h6><b>Tipo de ingreso:</b></h6>
+                                </div>
+                            </div>
+                            <p>
+                                <label class="col s3">
+                                    <input type="radio" name="tipo_ingreso" id="tipo_ingreso" value="Nuevo ingreso" checked>
+                                    <span>Nuevo ingreso</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="tipo_ingreso" id="tipo_ingreso" value="Equivalencia">
+                                    <span>Equivalencia</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="tipo_ingreso" id="tipo_ingreso" value="Reingreso">
+                                    <span>Reingreso</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="tipo_ingreso" id="tipo_ingreso" value="Cambio de carrera">
+                                    <span>Cambio de carrera</span>
+                                </label>
+                            </p>
+                            <br><br><br>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h6><b>Por cuáles medios obtuvo la información de la oferta académica de nuestra universidad:</b></h6>
+                                </div>
+                            </div>
+                            <p>
+                                <label class="col s3">
+                                    <input type="radio" name="medio_referencia" id="medio_referencia" value="Periódico" checked>
+                                    <span>Periódico</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="medio_referencia" id="medio_referencia" value="Radio">
+                                    <span>Radio</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="medio_referencia" id="medio_referencia" value="Televisión">
+                                    <span>Televisión</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="medio_referencia" id="medio_referencia" value="Visita o Colegios">
+                                    <span>Visita o Colegios</span>
+                                </label>
+                            </p>
+                            <br><br>
+                            <p>
+                                <label class="col s3">
+                                    <input type="radio" name="medio_referencia" id="medio_referencia" value="Redes Sociales">
+                                    <span>Redes Sociales</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="medio_referencia" id="medio_referencia" value="Página Web">
+                                    <span>Página Web</span>
+                                </label>
+                                <label class="col s3">
+                                    <input type="radio" name="medio_referencia" id="medio_referencia" value="Amigos que estudian en la UEES">
+                                    <span>Amigos que estudian en la UEES</span>
+                                </label>
+                            </p>
+                            <br><br><br>
+                            <div class="input-field col s12">
+                                <input placeholder="Nombre completo de amigo/a" type="text" name="nombre_amigo" id="nombre_amigo">
+                                <label for="referencia">UEES:</label>
+                            </div>
+                            <br><br><br>
+                            <div class="input-field col s12">
+                                <input placeholder="" type="text" name="carrera_amigo" id="carrera_amigo">
+                                <label for="carrera_amigo">Carrera que estudia su amigo/a:</label>
+                            </div>
+                            <br>
+                            <h6><b>Centro educativo donde estudió:</b></h6>
+                            <table class="responsive_table stiped centered">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre del colegio, Instituto o Universidad de procedencia</th>
+                                        <th>Bachiller Opción</th>
+                                        <th>Carrera o ciclo estudiado</th>
+                                        <th>Cuota que pagaba</th>
+                                        <th>Quién pago la cuota</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" name="lugar_procedencia"></td>
+                                        <td><input type="text" name="bachiller_opcion"></td>
+                                        <td><input type="text" name="ciclo_estudiado"></td>
+                                        <td><input placeholder="$" type="text" name="cuota_pagaba" onkeypress="return filterFloat(event,this);"></td>
+                                        <td><input type="text" name="pago_cuota"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="text" name="lugar_procedencia2"></td>
+                                        <td><input type="text" name="bachiller_opcion2"></td>
+                                        <td><input type="text" name="ciclo_estudiado2"></td>
+                                        <td><input placeholder="$" type="text" name="cuota_pagaba2" onkeypress="return filterFloat(event,this);"></td>
+                                        <td><input type="text" name="pago_cuota2"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br><br>
+                            <p>
+                                <label>
+                                    <h6>
+                                        Gozo de Beca o cuota diferenciada en la institución de procedencia
+                                        <label>
+                                            <input type="radio" name="beca_escuela" value="Si" id="beca_escuela" checked>
+                                            <span>Si</span>
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="beca_escuela" value="No" id="beca_escuela">
+                                            <span>No</span>
+                                        </label>
+                                    </h6>
+                                </label>
+                            </p>
+                            <div class="input-field col s6">
+                                <input type="text" placeholder="$" id="beca_precio" name="beca_precio" class="validate" onkeypress="return filterFloat(event,this);">
+                                <label for="cancelar">Cuanto Cancelaba</label>
+                            </div>        
+                        </div>
+                        <a class="waves-effect waves-light btn next-step right">Siguiente</a>
+                    </div>
+                </li>
+                <li class="step">
+                    <div class="step-title waves-effect">Grupo Familiar del estudiante</div>
+                    <div class="step-content">
+                        <h3>GRUPO FAMILIAR DEL ESTUDIANTE</h3>
+                        <br><br>
+                        <div class="row">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h6><b>El grupo familiar con el que vive en la misma casa, Si usted costeara sus estudios poner solo los dependientes: </b></h6>
+                                </div>
+                                <p>
+                                    <label class="col s3">
+                                        <input type="radio" name="cantidad_familiares" value="1-3" checked>
+                                        <span>1-3</span>
+                                    </label>
+                                    <label class="col s3">
+                                        <input type="radio" name="cantidad_familiares" value="4-5">
+                                        <span>4-5</span>
+                                    </label>
+                                    <label class="col s3">
+                                        <input type="radio" name="cantidad_familiares" value="6-8">
+                                        <span>6-8</span>
+                                    </label>
+                                    <label class="col s3">
+                                        <input type="radio" name="cantidad_familiares" value="9 o Más">
+                                        <span>9 o Más</span>
+                                    </label>
+                                </p>
+                                <br><br><br><br><br>
+                                <table class="stiped  centered">
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Nombre</th>
+                                            <th>Parentesco</th>
+                                            <th>Edad</th>
+                                            <th>Profesión u Oficio</th>
+                                            <th>Lugar de trabajo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td><input name="nombre" type="text"></td>
+                                            <td><input name="parentesco" type="text"></td>
+                                            <td><input name="edad_familiar" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion" type="text"></td>
+                                            <td><input name="lugar_trabajo" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td><input name="nombre2" type="text"></td>
+                                            <td><input name="parentesco2" type="text"></td>
+                                            <td><input name="edad_familiar2" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion2" type="text"></td>
+                                            <td><input name="lugar_trabajo2" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td><input name="nombre3" type="text"></td>
+                                            <td><input name="parentesco3" type="text"></td>
+                                            <td><input name="edad_familiar3" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion3" type="text"></td>
+                                            <td><input name="lugar_trabajo3" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td><input name="nombre4" type="text"></td>
+                                            <td><input name="parentesco4" type="text"></td>
+                                            <td><input name="edad_familiar4" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion4" type="text"></td>
+                                            <td><input name="lugar_trabajo4" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td><input name="nombre5" type="text"></td>
+                                            <td><input name="parentesco5" type="text"></td>
+                                            <td><input name="edad_familiar5" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion5" type="text"></td>
+                                            <td><input name="lugar_trabajo5" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td><input name="nombre6" type="text"></td>
+                                            <td><input name="parentesco6" type="text"></td>
+                                            <td><input name="edad_familiar6" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion6" type="text"></td>
+                                            <td><input name="lugar_trabajo6" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td><input name="nombre7" type="text"></td>
+                                            <td><input name="parentesco7" type="text"></td>
+                                            <td><input name="edad_familiar7" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion7" type="text"></td>
+                                            <td><input name="lugar_trabajo7" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td><input name="nombre8" type="text"></td>
+                                            <td><input name="parentesco8" type="text"></td>
+                                            <td><input name="edad_familiar8" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion8" type="text"></td>
+                                            <td><input name="lugar_trabajo8" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td><input name="nombre9" type="text"></td>
+                                            <td><input name="parentesco9" type="text"></td>
+                                            <td><input name="edad_familiar9" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion9" type="text"></td>
+                                            <td><input name="lugar_trabajo9" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td><input name="nombre10" type="text"></td>
+                                            <td><input name="parentesco10" type="text"></td>
+                                            <td><input name="edad_familiar10" type="text" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input name="profesion10" type="text"></td>
+                                            <td><input name="lugar_trabajo10" type="text"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <a class="waves-effect waves-light btn next-step right">Siguiente</a>
+                    </div>
+                </li>
+                <li class="step">
+                    <div class="step-title waves-effect">Educación</div>
+                    <div class="step-content">
+                        <h3>EDUCACIÓN</h3>
+                        <br><br>
+                        <div class="row">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h6><b>En el grupo familiar, exluyendo al candidato, ¿Quiénes se encuentra estudiando y afectan los ingresos de la familia?</b></h6>
+                                </div>
+                                <br><br><br><br>
+                                <table class="striped highlight centered">
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Nombre</th>
+                                            <th>Grado o Nivel</th>
+                                            <th>Centro de Estudios</th>
+                                            <th>Cuota</th>
+                                            <th>Quien es el responsable del pago de la cuota</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td><input name="nombre_familiar" type="text"></td>
+                                            <td><input name="grado_educacion" type="text"></td>
+                                            <td><input name="centro_estudios" type="text"></td>
+                                            <td><input name="cuota" placeholder="$" type="text" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input name="responsable_cuota" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td><input name="nombre_familiar2" type="text"></td>
+                                            <td><input name="grado_educacion2" type="text"></td>
+                                            <td><input name="centro_estudios2" type="text"></td>
+                                            <td><input name="cuota2" placeholder="$" type="text" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input name="responsable_cuota2" type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td><input name="nombre_familiar3" type="text"></td>
+                                            <td><input name="grado_educacion3" type="text"></td>
+                                            <td><input name="centro_estudios3" type="text"></td>
+                                            <td><input name="cuota3" placeholder="$" type="text" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input name="responsable_cuota3" type="text"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <a class="waves-effect waves-light btn next-step right">Siguiente</a>
+                    </div>
+                </li>
+                <li class="step">
+                    <div class="step-title waves-effect">Tenencia de bienes e inmuebles familiares</div>
+                    <div class="step-content">
+                        <h3>TENENCIA DE BIENES E INMUBLES FAMILIARES</h3>
+                        <div class="row">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h6><b>Favor detallar en cada casilla si posee algún bien que este cancelado. Favor poner en la última casilla el valor actual de mercado o un estimado del bien</b></h6>
+                                </div>
+                                <br><br><br><br>
+                                <table class="striped highlight centered">
+                                    <thead>
+                                        <tr>
+                                            <th>Casa apartamento-finca, solar, rancho, etc</th>
+                                            <th>Ubicación / Dirección</th>
+                                            <th>No.de Habitaciones</th>
+                                            <th>¿Cuantos baños tiene en el inmueble?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" name="propiedad_familia"></td>
+                                            <td><textarea name="direccion_propiedad" class="validate materialize-textarea" ></textarea></td>
+                                            <td><input type="text" name="n_habitaciones" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input type="text" name="n_baños" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="propiedad_familia2"></td>
+                                            <td><textarea name="direccion_propiedad2" class="validate materialize-textarea" ></textarea></td>
+                                            <td><input type="text" name="n_habitaciones2" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input type="text" name="n_baños2" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="propiedad_familia3"></td>
+                                            <td><textarea name="direccion_propiedad3" class="validate materialize-textarea" ></textarea></td>
+                                            <td><input type="text" name="n_habitaciones3" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input type="text" name="n_baños3" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="striped highlight centered">
+                                    <thead>
+                                        <tr>
+                                            <th>Institución Vendedora</th>
+                                            <th>Cuota Mensual (si aplica)</th>
+                                            <th>Saldo o valor Actual</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" name="inst_vendedora"></td>
+                                            <td><input type="text" name="cuota_mensual" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="valor_actual" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="inst_vendedora2"></td>
+                                            <td><input type="text" name="cuota_mensual2" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="valor_actual2" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="inst_vendedora3"></td>
+                                            <td><input type="text" name="cuota_mensual3" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="valor_actual3" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="input-field col s6">
+                                    <input type="text" placeholder="$" id="total_cancelado" name="total_cancelado" class="validate" onkeypress="return filterFloat(event,this);">
+                                    <label for="cancelar_bienes">Total cancelado hasta la fecha</label>
+                                </div>
+                                <div class="input-field col s12">
+                                    <p>
+                                        <label>
+                                            <h6>
+                                                ¿Posee Vehiculo?
+                                                <label>
+                                                    <input type="radio" name="posee_vehiculo" value="Si" id="posee_vehiculo" checked>
+                                                    <span>Si</span>
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="posee_vehiculo" value="No" id="posee_vehiculo">
+                                                    <span>No</span>
+                                                </label>
+                                            </h6>
+                                        </label>
+                                    </p>
+                                </div>
+                                <table class="stiped  centered">
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Tipo</th>
+                                            <th>Marca</th>
+                                            <th>Año/Modelo</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td><input type="text" name="tipo_vehiculo"></td>
+                                            <td><input type="text" name="marca_vehiculo"></td>
+                                            <td><input type="text" name="año_vehiculo"></td>
+                                            <td><input placeholder="$" type="text" name="valor_vehiculo" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td><input type="text" name="tipo_vehiculo2"></td>
+                                            <td><input type="text" name="marca_vehiculo2"></td>
+                                            <td><input type="text" name="año_vehiculo2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_vehiculo2" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="input-field col s12">
+                                    <h6><b>Detalle de la tenencia de bienes muebles. Si no se recuerda del costo coloque un valor estimado del valor actual</b></h6>
+                                </div>
+                                <table class="striped highlight centered">
+                                    <thead>
+                                        <tr>
+                                            <th>Articulo</th>
+                                            <th>Cantidad</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Muebles de sala</td>
+                                            <td><input type="text" name="cantidad_mueble_sala" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_mueble_sala" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Muebles de comedor</td>
+                                            <td><input type="text" name="cantidad_mueble_comedor" onkeypress="return valideKey(event);" maxlength="2" ></td>
+                                            <td><input placeholder="$" type="text" name="valor_mueble_comedor" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Refrigeradora</td>
+                                            <td><input type="text" name="cantidad_refri" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_refri" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cocina de 4 o más quemadores</td>
+                                            <td><input type="text" name="cantidad_cocina" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_cocina" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Horno microondas</td>
+                                            <td><input type="text" name="cantidad_horno" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_horno" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Licuadora</td>
+                                            <td><input type="text" name="cantidad_licuadora" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_licuadora" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Televisor</td>
+                                            <td><input type="text" name="cantidad_tv" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_tv" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Teatro en casa</td>
+                                            <td><input type="text" name="cantidad_teatro" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_teatro" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Equipo de sonido</td>
+                                            <td><input type="text" name="cantidad_sonido" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_sonido" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cámara digital</td>
+                                            <td><input type="text" name="cantidad_camara" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_camara" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Computadora / Laptop</td>
+                                            <td><input type="text" name="cantidad_compu" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_compu" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lavadora</td>
+                                            <td><input type="text" name="cantidad_lavadora" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_lavadora" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Secadora</td>
+                                            <td><input type="text" name="cantidad_secadora" onkeypress="return valideKey(event);" maxlength="2"></td>
+                                            <td><input placeholder="$" type="text" name="valor_secadora" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <a class="waves-effect waves-light btn next-step right">Siguiente</a>
+                    </div>
+                </li>
+                <li class="step">
+                    <div class="step-title waves-effect">Datos económicos de la familia</div>
+                    <div class="step-content">
+                        <h3>DATOS ECONÓMICOS DE LA FAMILIA</h3>
+                        <div class="row">
+                            <div class="row">
+                                <div class="input-field col s12 m12 l12">
+                                    <h6><b>Detalle los ingresos mensuales de la familia, (o estudiante) según documentos presentados que los amparan</b></h6>
+                                </div>
+                                <table class="striped highlight centered">
+                                    <thead>
+                                        <tr>
+                                            <th>Personas que trabajan</th>
+                                            <th>Lugar de trabajo</th>
+                                            <th>Salario Mensual</th>
+                                            <th>Descuentos</th>
+                                            <th>Aporte Líquido</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Alumno</td>
+                                            <td><input type="text" name="trabajo_alumno"></td>
+                                            <td><input type="text" name="salario_alumno" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="descuento_alumno" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="aporte_liquido" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mamá</td>
+                                            <td><input type="text" name="trabajo_mama"></td>
+                                            <td><input type="text" name="salario_mama" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="descuento_mama" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="aporte_mama" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Papá</td>
+                                            <td><input type="text" name="trabajo_papa"></td>
+                                            <td><input type="text" name="salario_papa" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="descuento_papa" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="aporte_papa" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remesas</td>
+                                            <td><input type="text" name="trabajo_remesas"></td>
+                                            <td><input type="text" name="salario_remesas" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="descuento_remesas" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="aporte_remesas" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Otros</td>
+                                            <td><input type="text" name="trabajo_otros"></td>
+                                            <td><input type="text" name="salario_otros" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="descuento_otros" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="aporte_otros" onkeypress="return filterFloat(event,this);"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="input-field col s12 m12 l12">
+                                    <h6><b>Nota: si usted se costea los estudios reflejar únicamente los gastos que realiza en lo personal</b></h6>
+                                    <h6>Si alguna de estos gastos aparece descontada en la constancia de salario, no detallarlos en este cuadro</h6>
+                                </div>
+                                <table class="striped highlight centered">
+                                    <thead>
+                                        <tr>
+                                            <th>Concepto</th>
+                                            <th>Cantidades</th>
+                                            <th>Detalles</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Alimentación</td>
+                                            <td><input type="text" name="cantidad_alimento" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_alimento"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pago de Casa</td>
+                                            <td><input type="text" name="cantidad_pago_casa" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_pago_casa"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Abono a préstamo</td>
+                                            <td><input type="text" name="cantidad_abono_prestamo" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_abono_prestamo"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Abono a tarjetas</td>
+                                            <td><input type="text" name="cantidad_abono_tarjetas" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_abono_tarjetas"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Servicios básicos (Agua, luz, teléfono)</td>
+                                            <td><input type="text" name="cantidad_serbasicos" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_serbasicos"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Educación Familiar</td>
+                                            <td><input type="text" name="cantidad_educacion" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_educacion"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Transporte (público)</td>
+                                            <td><input type="text" name="cantidad_transporte" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_transporte"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Combustible</td>
+                                            <td><input type="text" name="cantidad_combustible" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_combustible"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ayuda a parientes</td>
+                                            <td><input type="text" name="cantidad_ayuda_parientes" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_ayuda_parientes"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Salud</td>
+                                            <td><input type="text" name="cantidad_salud" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_salud"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Internet</td>
+                                            <td><input type="text" name="cantidad_internet" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_internet"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cable</td>
+                                            <td><input type="text" name="cantidad_cable" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_cable"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Otros gastos</td>
+                                            <td><input type="text" name="cantidad_otros" onkeypress="return filterFloat(event,this);"></td>
+                                            <td><input type="text" name="detalles_otros"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="input-field col s12 m12 l12">
+                                    <h6><b>ESPACIO RESERVADOR EXCLUSIVAMENTE PARA LA UNIVERSIDAD EVANGÉLICA DE EL SALVADOR</b></h6>
+                                    <h6><b>Observaciones:</b></h6>
+                                    <textarea name="observaciones" id="observaciones"  class="materialize-textarea" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="waves-effect waves-light btn next-step right">Siguiente</a>
+                    </div>
+                </li>
+                <li class="step">
+                    <div class="step-title waves-effect">Declaración Jurada</div>
+                    <div class="step-content">
+                        <h3>DECLARACIÓN JURADA</h3>
+                        <div class="row">
+                            <div class="row">
+                                <div class="input-field col s12 m12 l12">
+                                    <p>
+                                        Declaro que toda la información proporionada en el estudio socioeconómico completada de manera Virtual es verídica
+                                        y autorizo a la Universidad Evangélica de El Salvador, a verificarla en cualquier momento durante la carreara, mientras
+                                        se conserve la condición alumno/a activo/a Asimismo, declaro mi conformidad en someterme a los requerimientos del mismo y
+                                        a seguir todas las medidas que la Universidad estime convenientes en caso de comprobar falsedad en la información.
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s6 m6 l6">
+                                        <input placeholder="Nombre completo del estudiante" name="nombre_aspirante" type="text" class="validate">
+                                        <label for="nombre_aspirante">Nombre completo del estudiante</label> 
+                                        </div>
+                                        <div class="input-field col s6 m6 l6">
+                                            <p></p>
+                                            <label>
+                                                <label>
+                                                    <h6>
+                                                        ¿Esta de acuerdo?
+                                                        <label>
+                                                            <input type="radio" name="firma_aspirante" value="Si" id="firma">
+                                                            <span>Si</span>
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio" name="firma_aspirante" value="" id="firma">
+                                                            <span>No</span>
+                                                        </label>
+                                                    </h6>
+                                                  </label>
+                                                
+                                              </label>
+                                                                           
+                                            <br>
+                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s6 m6 l6">
+                                        <input placeholder="Nombre completo del responsable" name="nombre_responsable" type="text" class="validate">
+                                        <label for="nombre_responsablee">Nombre completo del responsable</label> 
+                                    </div>
+                                    <div class="input-field col s6 m6 l6">
+                                        <label>
+                                            <h6>
+                                                ¿Esta de acuerdo?
+                                                <label>
+                                                    <input type="radio" name="firma_responsable" value="Si" id="firma2">
+                                                    <span>Si</span>
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="firma_responsable" value="" id="firma2" checked>
+                                                    <span>No</span>
+                                                </label>
+                                            </h6>
+                                            
+                                          </label>                                                       
+                                        <br>
+                                    </div>
+                                </div>
+                                
+                                
+                                <br><br>
+                                <div class="input-field col s6 m6 l6">
+                                    <input placeholder="Fecha"  type="text" name="fecha_firmo" class="datepickers2" id="calendario">
+                                    <label for="fecha_firmo">Ingrese la fecha en que firmó</label>
+                                </div>
+                            </div>
+                            <button class="btn waves-effect waves-light" type="submit" id="btnGuardar">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </form>
+        
+    </div>
+    
+</body>
+{% include "footer.html" %}
+</html>
+<script language="JavaScript" type="text/javascript" src="{% static '/script.js' %}"></script> 
+
+<script>
+    var stepper = document.querySelector('.stepper');
+    var stepperInstace = new MStepper(stepper, {
+       // options
+       firstActive: 0 // this is the default
+    })
+ </script>
+ <script>
+    const Calender = document.querySelector('.datepickers');
+    M.Datepicker.init(Calender,{
+        format: 'dd/mm/yyyy',
+        minDate: new Date(1950,01,01),
+        maxDate: new Date(2007,01,01),
+        yearRange: 30,
+        firstDay: 1,
+        showDaysInNextAndPreviousMonths: true,
+        i18n: {
+            months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            weekdays: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+            weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vier', 'Sab'],
+            weekdaysAbbrev: ['D', 'L', 'M', 'M', 'J', 'V', 'S']
+        }
+    });
+
+ </script>
+ <script>
+    const Calenders = document.querySelector('.datepickers2');
+    M.Datepicker.init(Calenders,{
+        format: 'dd/mm/yyyy',
+        yearRange: 30,
+        firstDay: 1,
+        showDaysInNextAndPreviousMonths: true,
+        i18n: {
+            months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            weekdays: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+            weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mier', 'Jue', 'Vier', 'Sab'],
+            weekdaysAbbrev: ['D', 'L', 'M', 'M', 'J', 'V', 'S']
+        }
+    });
+
+ </script>
+
+
+

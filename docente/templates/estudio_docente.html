@@ -1,0 +1,897 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static '/arriba.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/mstepper.css' %}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="{% static '/arriba.js' %}"></script>   
+    <script language="JavaScript" type="text/javascript" src="{% static '/mstepper.js' %}"></script>
+    <script type="text/javascript">
+		function valideKey(evt){
+			
+			// code is the decimal ASCII representation of the pressed key.
+			var code = (evt.which) ? evt.which : evt.keyCode;
+			
+			if(code==8) { // backspace.
+			  return true;
+			} else if(code>=48 && code<=57) { // is a number.
+			  return true;
+			} else{ // other keys.
+			  return false;
+			}
+		}
+    </script>
+    <script>
+        
+        function filterFloat(evt,input)
+        {
+            // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
+            var key = window.Event ? evt.which : evt.keyCode;    
+            var chark = String.fromCharCode(key);
+            var tempValue = input.value+chark;
+            if(key >= 48 && key <= 57){
+                if(filter(tempValue)=== false){
+                    return false;
+                }else{       
+                    return true;
+                }
+            }else{
+                if(key == 8 || key == 13 || key == 0) {     
+                    return true;              
+                }else if(key == 46){
+                        if(filter(tempValue)=== false){
+                            return false;
+                        }else{       
+                            return true;
+                        }
+                }else{
+                    return false;
+                }
+            }
+        }
+        function filter(__val__)
+        {
+            var preg = /^([0-9]+\.?[0-9]{0,2})$/; 
+            if(preg.test(__val__) === true){
+                return true;
+            }else{
+            return false;
+            }
+            
+        }
+
+    </script>
+    {%  include "navbar.html" %}
+</head>
+<body>
+    <div class="container">
+        {% if estudiante  %}
+            {% for estudiante in estudiante %}
+                
+                <form action="../update_estudio/"  method="POST" class="col s12">
+                    <ul class="stepper horizontal">
+                        <li class="step active">
+                            <div class="step-title waves-effect">DATOS GENERALES DEL ESTUDIANTE</div>
+                            <div class="step-content">
+                                <H3>DATOS GENERALES DEL ESTUDIANTE</H3>
+                                <br><br>
+                                {% csrf_token %}
+                                <div class="row">  
+                                    <div class="row">
+                                        <div class="input-field col s4">
+                                            <input value="{{ estudiante.primer_apellido }}" name="primer_apellido" id="primer_apellido" type="text" class="validate" readonly>
+                                            <label for="primer_apellido">Primer apellido</label>
+                                        </div>
+                                        <div class="input-field col s4">
+                                            <input value="{{ estudiante.segundo_apellido }}" id="segundo_apellido" name="segundo_apellido" type="text" class="validate" readonly>
+                                            <label for="segundo_apellido">Segundo apellido</label>
+                                        </div>
+                                        <div class="input-field col s4">
+                                            <input value="{{ estudiante.nombre_estudiante }}" id="nombre_estudiante" name="nombre_estudiante" type="text" class="validate">
+                                            <label for="nombre_estudiante">Nombres</label>
+                                        </div>
+                                    </div>
+                                    {% if contacto_estudiante %}
+                                        {% for contacto_estudiante in contacto_estudiante %}
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <textarea placeholder="{{ contacto_estudiante.direccion_exacta }}" name="direccion_exacta" id="direccion_exacta" class="materialize-textarea" readonly>{{ contacto_estudiante.direccion_exacta }}</textarea>
+                                                    <label for="direccion_exacta">Dirección</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s6">
+                                                    <input value="{{ contacto_estudiante.telefono_fijo }}" id="telefono_fijo" name="telefono_fijo" type="text" class="validate" onkeypress="return valideKey(event);" maxlength="8" readonly>
+                                                    <label for="telefono_fijo">Teléfono fijo</label>
+                                                </div>
+                                                <div class="input-field col s6">
+                                                    <input value="{{ contacto_estudiante.celular }}" id="celular" name="celular" type="text" class="validate" onkeypress="return valideKey(event);" maxlength="8" readonly>
+                                                    <label for="celular">Cel</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <input value="{{ contacto_estudiante.email }}" id="email" name="email" type="text" class="validate" readonly>
+                                                    <label for="email">Correo Electrónico</label>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <h6><b>Vive en:</b></h6>
+                                            <input value="{{ estudiante.vive_en }}" id="vive_en" name="vive_en" type="text" class="validate" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <h6>Si selecciono Otros Especifique:</h6>
+                                            <input value="{{ estudiante.otro_vive_en }}" name="otro_vive_en" id="otro_vive_en" type="text" class="validate" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <h6><b>Vive con:</b></h6>
+                                            <input value="{{ estudiante.vive_con }}" id="vive_con" name="vive_con" type="text" class="validate" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <h6>Si selecciono Otros Especifique:</h6>
+                                            <input value="{{ estudiante.otro_vive_con }}" id="otro_vive_con" name="otro_vive_con" type="text" class="validate" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <h6><b>Estado Civil:</b></h6>
+                                            <input value="{{ estudiante.estado_civil }}" id="estado_civil" name="estado_civil" type="text" class="validate" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <textarea placeholder="Inbrese el lugar de nacimiento" name="lugar_nacimiento" id="lugar_nacimiento" class="materialize-textarea" readonly>{{ estudiante.lugar_nacimiento }}</textarea>
+                                        <label for="lugar_nacimiento">Lugar de nacimiento</label>
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input value="{{ estudiante.fecha_nacimiento }}" placeholder="Fecha"  type="text" name="fecha_nacimiento" id="fecha" readonly>
+                                        <label for="fecha_nacimiento">Ingrese la fecha de nacimiento</label>
+                                    </div>
+                                    <div class="input-field col s3">
+                                        <input value="{{ estudiante.edad_estudiante }}" type="text" name="edad_estudiante" id="edad_estudiante" onkeypress="return valideKey(event);" maxlength="2" readonly>
+                                        <label for="edad_estudiante">Edad</label>
+                                    </div>
+                                    <div class="input-field col s3">
+                                        <input value="{{ id }}" type="text" name="id" id="id" hidden>
+                                       
+                                    </div>
+                                    {% if carrera %}
+                                        {% for carrera in carrera %}
+                                            <div class="input-field col s12">
+                                                <input value="{{ carrera.nombre_carrera }}" type="text" name="nombre_carrera" id="nombre_carrera" readonly>
+                                                <label for="edad_estudiante">Carrera</label>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <h6><b>Titulo con que cuenta:</b></h6>
+                                            <input value="{{ estudiante.tipo_titulo }}" type="text" name="tipo_titulo" id="tipo_titulo" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <h6><b>Tipo de ingreso:</b></h6>
+                                            <input value="{{ estudiante.tipo_ingreso }}" type="text" name="tipo_ingreso" id="tipo_ingreso" readonly>
+                                        </div>
+                                    </div>
+                                    {% if referencia %}
+                                        {% for referencia in referencia %}
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <h6><b>Por cuáles medios obtuvo la información de la oferta académica de nuestra universidad:</b></h6>
+                                                    <input value="{{ referencia.medio_referencia }}" type="text" name="medio_referencia" id="medio_referencia" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="input-field col s12">
+                                                <input value="{{ referencia.otros_medios }}" type="text" name="otros_medios" id="otros_medios" readonly>
+                                                <label for="medios">Otros Especifique</label>
+                                            </div>
+                                            <br><br><br>
+                                            <div class="input-field col s12">
+                                                <input value="{{ referencia.nombre_amigo }}" type="text" name="nombre_amigo" id="nombre_amigo" readonly>
+                                                <label for="referencia">Nombre completo de amigo/a:</label>
+                                            </div>
+                                            <br><br><br>
+                                            <div class="input-field col s12">
+                                                <input value="{{ referencia.carrera_amigo }}" type="text" name="carrera_amigo" id="carrera_amigo" readonly>
+                                                <label for="carrera_amigo">Carrera que estudia su amigo/a:</label>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <br>
+                                    <h6><b>Centro educativo donde estudió:</b></h6>
+                                    <table class="responsive_table stiped centered">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre del colegio, Instituto o Universidad de procedencia</th>
+                                                <th>Bachiller Opción</th>
+                                                <th>Carrera o ciclo estudiado</th>
+                                                <th>Cuota que pagaba</th>
+                                                <th>Quién pago la cuota</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><input value="{{ estudiante.lugar_procedencia }}" type="text" name="lugar_procedencia" readonly></td>
+                                                <td><input value="{{ estudiante.bachiller_opcion }}" type="text" name="bachiller_opcion" readonly></td>
+                                                <td><input value="{{ estudiante.ciclo_estudiado }}" type="text" name="ciclo_estudiado" readonly></td>
+                                                <td><input value="{{ estudiante.cuota_pagaba }}" placeholder="$" type="text" name="cuota_pagaba" readonly></td>
+                                                <td><input value="{{ estudiante.pago_cuota }}" type="text" name="pago_cuota" readonly></td>
+                                            </tr>
+                                            <tr>
+                                                <td><input value="{{ estudiante.lugar_procedencia2 }}" type="text" name="lugar_procedencia" readonly></td>
+                                                <td><input value="{{ estudiante.bachiller_opcion2 }}" type="text" name="bachiller_opcion" readonly></td>
+                                                <td><input value="{{ estudiante.ciclo_estudiado2 }}" type="text" name="ciclo_estudiado" readonly></td>
+                                                <td><input value="{{ estudiante.cuota_pagaba2 }}" placeholder="$" type="text" name="cuota_pagaba" readonly></td>
+                                                <td><input value="{{ estudiante.pago_cuota2 }}" type="text" name="pago_cuota" readonly></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <br><br>
+                                    <p>
+                                        <label>
+                                            <h6>
+                                                Gozo de Beca o cuota diferenciada en la institución de procedencia
+                                                <label>
+                                                    <input type="radio" name="beca_escuela" value="Si" id="beca_escuela" checked readonly>
+                                                    <span>{{ estudiante.beca_escuela }}</span>
+                                                </label>
+                                            </h6>
+                                        </label>
+                                    </p>
+                                    <div class="input-field col s6">
+                                        <input value="{{ estudiante.beca_precio }}" type="text" placeholder="$" id="beca_precio" name="beca_precio" readonly>
+                                        <label for="cancelar">Cuanto Cancelaba</label>
+                                    </div>        
+                                </div>
+                                <a class="waves-effect waves-light btn next-step right">Siguiente</a>
+                            </div>
+                        </li>
+                        <li class="step">
+                            <div class="step-title waves-effect">Grupo Familiar del estudiante</div>
+                            {% if grupo_familiar %}
+                                {% for grupo_familiar in grupo_familiar %}
+                                    <div class="step-content">
+                                        <h3>GRUPO FAMILIAR DEL ESTUDIANTE</h3>
+                                        <br><br>
+                                        <div class="row">
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <h6><b>El grupo familiar con el que vive en la misma casa, Si usted costeara sus estudios poner solo los dependientes: </b></h6>
+                                                    <input value="{{ grupo_familiar.cantidad_familiares }}" type="text" placeholder="$" id="cantidad_familiares" name="cantidad_familiares" readonly>
+                                                </div>
+                                                <br><br><br><br><br>
+                                                <table class="stiped  centered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>N°</th>
+                                                            <th>Nombre</th>
+                                                            <th>Parentesco</th>
+                                                            <th>Edad</th>
+                                                            <th>Profesión u Oficio</th>
+                                                            <th>Lugar de trabajo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td><input value="{{ grupo_familiar.nombre }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>2</td>
+                                                            <td><input value="{{ grupo_familiar.nombre2 }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco2 }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar2 }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion2 }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo2 }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>3</td>
+                                                            <td><input value="{{ grupo_familiar.nombre3 }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco3 }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar3 }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion3 }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo3 }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>4</td>
+                                                            <td><input value="{{ grupo_familiar.nombre4 }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco4 }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar4 }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion4 }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo4 }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>5</td>
+                                                            <td><input value="{{ grupo_familiar.nombre5 }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco5 }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar5 }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion5 }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo5 }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>6</td>
+                                                            <td><input value="{{ grupo_familiar.nombre6 }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco6 }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar6 }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion6 }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo6 }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>7</td>
+                                                            <td><input value="{{ grupo_familiar.nombre7 }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco7 }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar7 }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion7 }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo7 }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>8</td>
+                                                            <td><input value="{{ grupo_familiar.nombre8 }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco8 }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar8 }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion8 }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo8 }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>9</td>
+                                                            <td><input value="{{ grupo_familiar.nombre9 }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco9 }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar9 }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion9 }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo9 }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>10</td>
+                                                            <td><input value="{{ grupo_familiar.nombre10 }}" name="nombre" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.parentesco10 }}" name="parentesco" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.edad_familiar10 }}" name="edad_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.profesion10 }}" name="profesion" type="text" readonly></td>
+                                                            <td><input value="{{ grupo_familiar.lugar_trabajo10 }}" name="lugar_trabajo" type="text" readonly></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <a class="waves-effect waves-light btn next-step right">Siguiente</a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </li>
+                        <li class="step">
+                            
+                            <div class="step-title waves-effect">Educación</div>
+                            {% if educacion %}
+                                {% for educacion in educacion %}
+                                    <div class="step-content">
+                                        <h3>EDUCACIÓN</h3>
+                                        <br><br>
+                                        <div class="row">
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <h6><b>En el grupo familiar, exluyendo al candidato, ¿Quiénes se encuentra estudiando y afectan los ingresos de la familia?</b></h6>
+                                                </div>
+                                                <br><br><br><br>
+                                                <table class="striped highlight centered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>N°</th>
+                                                            <th>Nombre</th>
+                                                            <th>Grado o Nivel</th>
+                                                            <th>Centro de Estudios</th>
+                                                            <th>Cuota</th>
+                                                            <th>Quien es el responsable del pago de la cuota</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td><input value="{{ educacion.nombre_familiar }}" name="nombre_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.grado_educacion }}" name="grado_educacion" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.centro_estudios }}" name="centro_estudios" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.cuota }}" name="cuota" placeholder="$" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.responsable_cuota }}" name="responsable_cuota" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>2</td>
+                                                            <td><input value="{{ educacion.nombre_familiar2 }}" name="nombre_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.grado_educacion2 }}" name="grado_educacion" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.centro_estudios2 }}" name="centro_estudios" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.cuota2 }}" name="cuota" placeholder="$" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.responsable_cuota2 }}" name="responsable_cuota" type="text" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>3</td>
+                                                            <td><input value="{{ educacion.nombre_familiar3 }}" name="nombre_familiar" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.grado_educacion3 }}" name="grado_educacion" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.centro_estudios3 }}" name="centro_estudios" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.cuota3 }}" name="cuota" placeholder="$" type="text" readonly></td>
+                                                            <td><input value="{{ educacion.responsable_cuota3 }}" name="responsable_cuota" type="text" readonly></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <a class="waves-effect waves-light btn next-step right">Siguiente</a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </li>
+                        <li class="step">
+                            <div class="step-title waves-effect">Tenencia de bienes e inmuebles familiares</div>
+                            {% if bienes %}
+                                {% for bienes in bienes %}
+                                    <div class="step-content">
+                                        <h3>TENENCIA DE BIENES E INMUBLES FAMILIARES</h3>
+                                        <div class="row">
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <h6><b>Favor detallar en cada casilla si posee algún bien que este cancelado. Favor poner en la última casilla el valor actual de mercado o un estimado del bien</b></h6>
+                                                </div>
+                                                <br><br><br><br>
+                                                <table class="striped highlight centered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Casa apartamento-finca, solar, rancho, etc</th>
+                                                            <th>Ubicación / Dirección</th>
+                                                            <th>No.de Habitaciones</th>
+                                                            <th>¿Cuantos baños tiene en el inmueble?</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><input value="{{ bienes.propiedad_familia }}" type="text" name="propiedad_familia" readonly></td>
+                                                            <td><textarea name="direccion_propiedad" class="validate materialize-textarea" readonly >{{ bienes.direccion_propiedad }}</textarea></td>
+                                                            <td><input value="{{ bienes.n_habitaciones }}" type="text" name="n_habitaciones" readonly></td>
+                                                            <td><input value="{{ bienes.n_baños }}" type="text" name="n_baños" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input value="{{ bienes.propiedad_familia2 }}" type="text" name="propiedad_familia" readonly></td>
+                                                            <td><textarea name="direccion_propiedad" class="validate materialize-textarea" readonly >{{ bienes.direccion_propiedad2 }}</textarea></td>
+                                                            <td><input value="{{ bienes.n_habitaciones2 }}" type="text" name="n_habitaciones" readonly></td>
+                                                            <td><input value="{{ bienes.n_baños2 }}" type="text" name="n_baños" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input value="{{ bienes.propiedad_familia3 }}" type="text" name="propiedad_familia" readonly></td>
+                                                            <td><textarea name="direccion_propiedad" class="validate materialize-textarea" readonly >{{ bienes.direccion_propiedad3 }}</textarea></td>
+                                                            <td><input value="{{ bienes.n_habitaciones3 }}" type="text" name="n_habitaciones" readonly></td>
+                                                            <td><input value="{{ bienes.n_baños3 }}" type="text" name="n_baños" readonly></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table class="striped highlight centered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Institución Vendedora</th>
+                                                            <th>Cuota Mensual (si aplica)</th>
+                                                            <th>Saldo o valor Actual</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><input value="{{ bienes.inst_vendedora }}" type="text" name="inst_vendedora" readonly></td>
+                                                            <td><input value="{{ bienes.cuota_mensual }}" type="text" name="cuota_mensual" readonly></td>
+                                                            <td><input value="{{ bienes.valor_actual }}" type="text" name="valor_actual" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input value="{{ bienes.inst_vendedora2 }}" type="text" name="inst_vendedora" readonly></td>
+                                                            <td><input value="{{ bienes.cuota_mensual2 }}" type="text" name="cuota_mensual" readonly></td>
+                                                            <td><input value="{{ bienes.valor_actual2 }}" type="text" name="valor_actual" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input value="{{ bienes.inst_vendedora3 }}" type="text" name="inst_vendedora" readonly></td>
+                                                            <td><input value="{{ bienes.cuota_mensual3 }}" type="text" name="cuota_mensual" readonly></td>
+                                                            <td><input value="{{ bienes.valor_actual3 }}" type="text" name="valor_actual" readonly></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="input-field col s6">
+                                                    <input value="{{ bienes.total_cancelado }}" type="text" placeholder="$" id="total_cancelado" name="total_cancelado" class="validate" readonly>
+                                                    <label for="cancelar_bienes">Total cancelado hasta la fecha</label>
+                                                </div>
+                                                <div class="input-field col s12">
+                                                    <p>
+                                                        <label>
+                                                            <h6>
+                                                                ¿Posee Vehiculo?
+                                                                <label>
+                                                                    <input type="radio" name="posee_vehiculo" value="Si" id="posee_vehiculo" checked readonly>
+                                                                    <span>{{ bienes.posee_vehiculo }}</span>
+                                                                </label>
+                                                            </h6>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                                <table class="stiped  centered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>N°</th>
+                                                            <th>Tipo</th>
+                                                            <th>Marca</th>
+                                                            <th>Año/Modelo</th>
+                                                            <th>Valor</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td><input value="{{ bienes.tipo_vehiculo }}" type="text" name="tipo_vehiculo" readonly></td>
+                                                            <td><input value="{{ bienes.marca_vehiculo }}" type="text" name="marca_vehiculo" readonly></td>
+                                                            <td><input value="{{ bienes.año_vehiculo }}" type="text" name="año_vehiculo" readonly></td>
+                                                            <td><input value="{{ bienes.valor_vehiculo }}" placeholder="$" type="text" name="valor_vehiculo" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>2</td>
+                                                            <td><input value="{{ bienes.tipo_vehiculo2 }}" type="text" name="tipo_vehiculo" readonly></td>
+                                                            <td><input value="{{ bienes.marca_vehiculo2 }}" type="text" name="marca_vehiculo" readonly></td>
+                                                            <td><input value="{{ bienes.año_vehiculo2 }}" type="text" name="año_vehiculo" readonly></td>
+                                                            <td><input value="{{ bienes.valor_vehiculo2 }}" placeholder="$" type="text" name="valor_vehiculo" readonly></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="input-field col s12">
+                                                    <h6><b>Detalle de la tenencia de bienes muebles. Si no se recuerda del costo coloque un valor estimado del valor actual</b></h6>
+                                                </div>
+                                                <table class="striped highlight centered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Articulo</th>
+                                                            <th>Cantidad</th>
+                                                            <th>Valor</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Muebles de sala</td>
+                                                            <td><input value="{{ bienes.cantidad_mueble_sala }}" type="text" name="cantidad_mueble_sala" readonly></td>
+                                                            <td><input value="{{ bienes.valor_mueble_sala }}" placeholder="$" type="text" name="valor_mueble_sala" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Muebles de comedor</td>
+                                                            <td><input value="{{ bienes.cantidad_mueble_comedor }}" type="text" name="cantidad_mueble_comedor" readonly ></td>
+                                                            <td><input value="{{ bienes.valor_mueble_comedor }}" placeholder="$" type="text" name="valor_mueble_comedor" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Refrigeradora</td>
+                                                            <td><input value="{{ bienes.cantidad_refri }}" type="text" name="cantidad_refri" readonly></td>
+                                                            <td><input value="{{ bienes.valor_refri }}" placeholder="$" type="text" name="valor_refri" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Cocina de 4 o más quemadores</td>
+                                                            <td><input value="{{ bienes.cantidad_cocina }}" type="text" name="cantidad_cocina" readonly></td>
+                                                            <td><input value="{{ bienes.valor_cocina }}" placeholder="$" type="text" name="valor_cocina" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Horno microondas</td>
+                                                            <td><input value="{{ bienes.cantidad_horno }}" type="text" name="cantidad_horno" readonly></td>
+                                                            <td><input value="{{ bienes.valor_horno }}" placeholder="$" type="text" name="valor_horno" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Licuadora</td>
+                                                            <td><input value="{{ bienes.cantidad_licuadora }}" type="text" name="cantidad_licuadora" readonly></td>
+                                                            <td><input value="{{ bienes.valor_licuadora }}" placeholder="$" type="text" name="valor_licuadora" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Televisor</td>
+                                                            <td><input value="{{ bienes.cantidad_tv }}" type="text" name="cantidad_tv" readonly></td>
+                                                            <td><input value="{{ bienes.valor_tv }}" placeholder="$" type="text" name="valor_tv" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Teatro en casa</td>
+                                                            <td><input value="{{ bienes.cantidad_teatro }}" type="text" name="cantidad_teatro" readonly></td>
+                                                            <td><input value="{{ bienes.valor_teatro }}" placeholder="$" type="text" name="valor_teatro" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Equipo de sonido</td>
+                                                            <td><input value="{{ bienes.cantidad_sonido }}" type="text" name="cantidad_sonido" readonly></td>
+                                                            <td><input value="{{ bienes.valor_sonido }}" placeholder="$" type="text" name="valor_sonido" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Cámara digital</td>
+                                                            <td><input value="{{ bienes.cantidad_camara }}" type="text" name="cantidad_camara" readonly></td>
+                                                            <td><input value="{{ bienes.valor_camara }}" placeholder="$" type="text" name="valor_camara" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Computadora / Laptop</td>
+                                                            <td><input value="{{ bienes.cantidad_compu }}" type="text" name="cantidad_compu" readonly></td>
+                                                            <td><input value="{{ bienes.valor_compu }}" placeholder="$" type="text" name="valor_compu" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Lavadora</td>
+                                                            <td><input value="{{ bienes.cantidad_lavadora }}" type="text" name="cantidad_lavadora" readonly></td>
+                                                            <td><input value="{{ bienes.valor_lavadora }}" placeholder="$" type="text" name="valor_lavadora" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Secadora</td>
+                                                            <td><input value="{{ bienes.cantidad_secadora }}" type="text" name="cantidad_secadora" readonly></td>
+                                                            <td><input value="{{ bienes.valor_secadora }}" placeholder="$" type="text" name="valor_secadora" readonly></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <a class="waves-effect waves-light btn next-step right">Siguiente</a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </li>
+                        <li class="step">
+                            <div class="step-title waves-effect">Datos económicos de la familia</div>
+                            {% if economico %}
+                                {% for economico in economico %}
+                                    <div class="step-content">
+                                        <h3>DATOS ECONÓMICOS DE LA FAMILIA</h3>
+                                        <div class="row">
+                                            <div class="row">
+                                                <div class="input-field col s12 m12 l12">
+                                                    <h6><b>Detalle los ingresos mensuales de la familia, (o estudiante) según documentos presentados que los amparan</b></h6>
+                                                </div>
+                                                <table class="striped highlight centered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Personas que trabajan</th>
+                                                            <th>Lugar de trabajo</th>
+                                                            <th>Salario Mensual</th>
+                                                            <th>Descuentos</th>
+                                                            <th>Aporte Líquido</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Alumno</td>
+                                                            <td><input value="{{ economico.trabajo_alumno }}" type="text" name="trabajo_alumno" readonly></td>
+                                                            <td><input value="{{ economico.salario_alumno }}" type="text" name="salario_alumno" readonly></td>
+                                                            <td><input value="{{ economico.descuento_alumno }}" type="text" name="descuento_alumno" readonly></td>
+                                                            <td><input value="{{ economico.aporte_liquido }}" type="text" name="aporte_liquido" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Mamá</td>
+                                                            <td><input value="{{ economico.trabajo_mama }}" type="text" name="trabajo_mama" readonly></td>
+                                                            <td><input value="{{ economico.salario_mama }}" type="text" name="salario_mama" readonly></td>
+                                                            <td><input value="{{ economico.descuento_mama }}" type="text" name="descuento_mama" readonly></td>
+                                                            <td><input value="{{ economico.aporte_mama }}" type="text" name="aporte_mama" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Papá</td>
+                                                            <td><input value="{{ economico.trabajo_papa }}" type="text" name="trabajo_papa" readonly></td>
+                                                            <td><input value="{{ economico.salario_papa }}" type="text" name="salario_papa" readonly></td>
+                                                            <td><input value="{{ economico.descuento_papa }}" type="text" name="descuento_papa" readonly></td>
+                                                            <td><input value="{{ economico.aporte_papa }}" type="text" name="aporte_papa" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Remesas</td>
+                                                            <td><input value="{{ economico.trabajo_remesas }}" type="text" name="trabajo_remesas" readonly></td>
+                                                            <td><input value="{{ economico.salario_remesas }}" type="text" name="salario_remesas" readonly></td>
+                                                            <td><input value="{{ economico.descuento_remesas }}" type="text" name="descuento_remesas" readonly></td>
+                                                            <td><input value="{{ economico.aporte_remesas }}" type="text" name="aporte_remesas" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Otros</td>
+                                                            <td><input value="{{ economico.trabajo_otros }}" type="text" name="trabajo_otros" readonly></td>
+                                                            <td><input value="{{ economico.salario_otros }}" type="text" name="salario_otros" readonly></td>
+                                                            <td><input value="{{ economico.descuento_otros }}" type="text" name="descuento_otros" readonly></td>
+                                                            <td><input value="{{ economico.aporte_otros }}" type="text" name="aporte_otros" readonly></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="input-field col s12 m12 l12">
+                                                    <h6><b>Nota: si usted se costea los estudios reflejar únicamente los gastos que realiza en lo personal</b></h6>
+                                                    <h6>Si alguna de estos gastos aparece descontada en la constancia de salario, no detallarlos en este cuadro</h6>
+                                                </div>
+                                                <table class="striped highlight centered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Concepto</th>
+                                                            <th>Cantidades</th>
+                                                            <th>Detalles</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Alimentación</td>
+                                                            <td><input value="{{ economico.cantidad_alimento }}" type="text" name="cantidad_alimento" readonly></td>
+                                                            <td><input value="{{ economico.detalles_alimento }}" type="text" name="detalles_alimento" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Pago de Casa</td>
+                                                            <td><input value="{{ economico.cantidad_pago_casa }}" type="text" name="cantidad_pago_casa" readonly></td>
+                                                            <td><input value="{{ economico.detalles_pago_casa }}" type="text" name="detalles_pago_casa" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Abono a préstamo</td>
+                                                            <td><input value="{{ economico.cantidad_abono_prestamo }}" type="text" name="cantidad_abono_prestamo" readonly></td>
+                                                            <td><input value="{{ economico.detalles_abono_prestamo }}" type="text" name="detalles_abono_prestamo" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Abono a tarjetas</td>
+                                                            <td><input value="{{ economico.cantidad_abono_tarjetas }}" type="text" name="cantidad_abono_tarjetas" readonly></td>
+                                                            <td><input value="{{ economico.detalles_abono_tarjetas }}" type="text" name="detalles_abono_tarjetas" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Servicios básicos (Agua, luz, teléfono)</td>
+                                                            <td><input type="text" value="{{ economico.cantidad_serbasicos }}" name="cantidad_serbasicos" readonly></td>
+                                                            <td><input type="text" value="{{ economico.detalles_serbasicos }}" name="detalles_serbasicos" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Educación Familiar</td>
+                                                            <td><input value="{{ economico.cantidad_educacion }}" type="text" name="cantidad_educacion" readonly></td>
+                                                            <td><input value="{{ economico.detalles_educacion }}" type="text" name="detalles_educacion" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Transporte (público)</td>
+                                                            <td><input value="{{ economico.cantidad_transporte }}" type="text" name="cantidad_transporte" readonly></td>
+                                                            <td><input value="{{ economico.detalles_transporte }}" type="text" name="detalles_transporte" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Combustible</td>
+                                                            <td><input value="{{ economico.cantidad_combustible }}" type="text" name="cantidad_combustible" readonly></td>
+                                                            <td><input value="{{ economico.detalles_combustible }}" type="text" name="detalles_combustible" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Ayuda a parientes</td>
+                                                            <td><input value="{{ economico.cantidad_ayuda_parientes }}" type="text" name="cantidad_ayuda_parientes" readonly></td>
+                                                            <td><input value="{{ economico.detalles_ayuda_parientes }}" type="text" name="detalles_ayuda_parientes" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Salud</td>
+                                                            <td><input value="{{ economico.cantidad_salud }}" type="text" name="cantidad_salud" readonly></td>
+                                                            <td><input value="{{ economico.detalles_salud }}" type="text" name="detalles_salud" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Internet</td>
+                                                            <td><input value="{{ economico.cantidad_internet }}" type="text" name="cantidad_internet" readonly></td>
+                                                            <td><input value="{{ economico.detalles_internet }}" type="text" name="detalles_internet"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Cable</td>
+                                                            <td><input value="{{ economico.cantidad_cable }}" type="text" name="cantidad_cable" readonly></td>
+                                                            <td><input value="{{ economico.detalles_cable }}" type="text" name="detalles_cable" readonly></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Otros gastos</td>
+                                                            <td><input value="{{ economico.cantidad_otros }}" type="text" name="cantidad_otros" readonly></td>
+                                                            <td><input value="{{ economico.detalles_otros }}" type="text" name="detalles_otros" readonly></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="input-field col s12 m12 l12">
+                                                    <h6><b>ESPACIO RESERVADOR EXCLUSIVAMENTE PARA LA UNIVERSIDAD EVANGÉLICA DE EL SALVADOR</b></h6>
+                                                    <h6><b>Observaciones:</b></h6>
+                                                    <textarea name="observaciones" id="observaciones"  class="materialize-textarea">{{ economico.observaciones }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                        <a class="waves-effect waves-light btn next-step right">Siguiente</a> 
+                                                                              
+                                       
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </li>
+                        <li class="step">
+                            <div class="step-title waves-effect">Declaración Jurada</div>
+                            <div class="step-content">
+                                <h3>DECLARACIÓN JURADA</h3>
+                                <div class="row">
+                                    <div class="row">
+                                        <div class="input-field col s12 m12 l12">
+                                            <p>
+                                                Declaro que toda la información proporionada en el estudio socioeconómico completada de manera Virtual es verídica
+                                                y autorizo a la Universidad Evangélica de El Salvador, a verificarla en cualquier momento durante la carreara, mientras
+                                                se conserve la condición alumno/a activo/a Asimismo, declaro mi conformidad en someterme a los requerimientos del mismo y
+                                                a seguir todas las medidas que la Universidad estime convenientes en caso de comprobar falsedad en la información.
+                                            </p>
+                                        </div>
+                                        {% if declaracion %}
+                                            {% for declaracion in declaracion %}
+                                
+                                                <div class="row">
+                                                    <div class="input-field col s6 m6 l6">
+                                                        <h6><b>Nombre del aspirante:</b></h6>
+                                                        <input value="{{ declaracion.nombre_aspirante }}" name="nombre_aspirante" type="text" class="validate" readonly>
+                                                        
+                                                        </div>
+                                                        <div class="input-field col s6 m6 l6">
+                                                            <p></p>
+                                                            <label>
+                                                                <label>
+                                                                    <h6>
+                                                                        ¿Esta de acuerdo?
+                                                                        <label>
+                                                                            <input type="radio"  name="firma_aspirante" value="Si" id="firma" checked>
+                                                                            <span>{{ declaracion.firma_aspirante }}</span>
+                                                                        </label>
+                                                                    </h6>
+                                                                </label>
+                                                                
+                                                            </label>
+                                                                                        
+                                                            <br>
+                                                        </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="input-field col s6 m6 l6">
+                                                        <h6><b>Nombre del responsable:</b></h6>
+                                                        <input value="{{ declaracion.nombre_responsable }}" name="nombre_responsable" type="text" class="validate" readonly>
+                                                    </div>
+                                                    <div class="input-field col s6 m6 l6">
+                                                        <label>
+                                                            <h6>
+                                                                ¿Esta de acuerdo?
+                                                                <label>
+                                                                    <input type="radio" name="firma_responsable" value="Si" id="firma2" checked>
+                                                                    <span>{{ declaracion.firma_responsable }}</span>
+                                                                </label>
+                                                            </h6>
+                                                            
+                                                        </label>                                                       
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                                <br><br>
+                                                <div class="input-field col s6 m6 l6">
+                                                    <h6><b>Fecha en la que firmo:</b></h6>
+                                                    <input value="{{ declaracion.fecha_firmo }}" name="fecha_firmo" type="text" readonly>
+                                                    
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                                        <i class="material-icons right">send</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+                
+            {% endfor %}
+        {% else %}
+        <h1> El aspirante aun no ha llenado el estudio socioeconómico</h1>
+        {% endif %}
+        
+    </div>
+</body>
+{% include "footer.html" %}
+</html>
+<script language="JavaScript" type="text/javascript" src="{% static '/script.js' %}"></script> 
+
+<script>
+    var stepper = document.querySelector('.stepper');
+    var stepperInstace = new MStepper(stepper, {
+       // options
+       firstActive: 0 // this is the default
+    })
+ </script>
+ <script>
+    const Calender = document.querySelector('.datepickers');
+    M.Datepicker.init(Calender,{
+        format: 'dd/mm/yyyy',
+        minDate: new Date(1950,01,01),
+        maxDate: new Date(2007,01,01),
+        yearRange: 30,
+        firstDay: 1,
+        showDaysInNextAndPreviousMonths: true,
+    });
+
+ </script>
+
+
+

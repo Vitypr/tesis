@@ -1,0 +1,86 @@
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>UEES</title>
+  <link rel="icon" type="images/png" href="{% static '/uees.png' %}" size="16x16">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.3.0/font-awesome-animation.min.css">
+  <link rel="stylesheet" href="{% static '/login.css' %}">
+</head>
+
+<div id="mainCoantiner">
+  <div class="main-header">
+    <div class="header-social">
+    <ul>
+      <li><a id="nmberone">1</a></li>
+      <li><a id="nmbertwo">2</a></li>
+      <li><a id="numberthree">3</a></li>
+      <li><a>4</a></li>
+    </ul>
+  </div>
+  <div class="folio-btn">
+    <a class="folio-btn-item ajax" href="https://bit.ly/2y6huFG" target="_blank"><span class="folio-btn-dot"></span><span class="folio-btn-dot"></span><span class="folio-btn-dot"></span><span class="folio-btn-dot"></span><span class="folio-btn-dot"></span><span class="folio-btn-dot"></span><span class="folio-btn-dot"></span><span class="folio-btn-dot"></span><span class="folio-btn-dot"></span></a>
+  </div>
+</div>
+
+<!--dust particel-->
+<div>
+  <div class="starsec"></div>
+  <div class="starthird"></div>
+  <div class="starfourth"></div>
+  <div class="starfifth"></div>
+</div>
+<!--Dust particle end--->
+
+<div class="container text-center text-dark mt-5">
+  <div class="row">
+    <div class="col-lg-4 d-block mx-auto mt-5">
+      <div class="row">
+        <div class="col-xl-12 col-md-12 col-md-12">
+          <div class="card">
+            <div class="card-body wow-bg" id="formBg">
+              {% if form.errors %}
+
+                <div><p>Error</p></div>
+
+              {% endif %}
+              <h3 class="colorboard">Login</h3>
+              <form method="post" >
+                {% csrf_token %}
+                <p class="text-muted">Sign In to your account</p>
+
+                <div class="input-group mb-3"> 
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control textbox-dg" placeholder="Username" {{ form.username }}>
+                  </div>
+                </div>
+                <div class="input-group mb-4">
+                  <input type="password" class="form-control textbox-dg" placeholder="Password" {{ form.password }}>
+                </div>
+
+
+                <div class="row">
+                  <div class="col-12"> 
+                    <button class="btn btn-primary btn-block logn-btn">Login</button> 
+                  </div>
+                  <div class="col-12"> <a href="forgot-password.html" class="btn btn-link box-shadow-0 px-0">Forgot password?</a> </div>
+                </div>
+
+                <div class="mt-6 btn-list">
+                  <button type="button" class="socila-btn btn btn-icon btn-facebook fb-color"><i class="fab fa-facebook-f faa-ring animated"></i></button> <button type="button" class="socila-btn btn btn-icon btn-google incolor"><i class="fab fa-linkedin-in faa-flash animated"></i></button> <button type="button" class="socila-btn btn btn-icon btn-twitter tweetcolor"><i class="fab fa-twitter faa-shake animated"></i></button> <button type="button" class="socila-btn btn btn-icon btn-dribbble driblecolor"><i class="fab fa-dribbble faa-pulse animated"></i></button>
+                </div>
+
+              </form>
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+  <script  src="{% static '/login.js' %}"></script>
+</div>
+</div>

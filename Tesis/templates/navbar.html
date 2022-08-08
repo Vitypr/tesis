@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0">
+    <title>UEES</title>
+
+    <!-- referencias -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" type="images/png" href="{% static '/uees.png' %}" size="16x16">
+    <link rel="stylesheet" type="text/css" href="{% static '/materialize.css' %}">
+    
+</head>
+<body>
+    {% if page == "estudio" and groups == "Estudiante"  %}
+
+        <nav>
+            <div class="nav-wrapper">
+                <a class="brand-logo"><img src="{% static '/uees.png' %}"  width="63px" height="auto"></a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a><i class="material-icons left">person</i>{{user}}</a></li>
+                    <li><a href="/"><i class="material-icons left">home</i>Inicio</a></li>
+                    <li><a href="../../accounts/logout"><i class="material-icons left">login</i>Cerrar sesión</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+    {% elif page == "estudio" and groups == "admin" %}
+
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo"><img src="{% static '/uees.png' %}"  width="63px" height="auto"></a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="../admin/"><i class="material-icons left">person</i>{{user}}</a></li>
+                <li><a href="/"><i class="material-icons left">home</i>Inicio</a></li>
+                <li><a href="../../accounts/logout"><i class="material-icons left">login</i>Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {% elif page == "estudio" and groups == "empleado" %}
+
+        <nav>
+            <div class="nav-wrapper">
+                <a class="brand-logo"><img src="{% static '/uees.png' %}"  width="63px" height="auto"></a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a><i class="material-icons left">person</i>{{user}}</a></li>
+                    <li><a href="../"><i class="material-icons left">home</i>Inicio</a></li>
+                    <li><a href="../../accounts/logout"><i class="material-icons left">login</i>Cerrar sesión</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    
+    {% elif page == "index" and groups == "admin" %}
+
+        <nav>
+            <div class="nav-wrapper">
+                <a class="brand-logo"><img src="{% static '/uees.png' %}"  width="63px" height="auto"></a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="../admin/"><i class="material-icons left">person</i>{{user}}</a></li>
+                    <li><a href="../../accounts/logout"><i class="material-icons left">login</i>Cerrar sesión</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    
+
+    {% elif page == "index" and groups == "Estudiante" %}
+
+
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo"><img src="{% static '/uees.png' %}"  width="63px" height="auto"></a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a><i class="material-icons left">person</i>{{user}}</a></li>
+                <li><a href="../../accounts/logout"><i class="material-icons left">login</i>Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {% else %}
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo"><img src="{% static '/uees.png' %}"  width="63px" height="auto"></a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a><i class="material-icons left">person</i>{{user}}</a></li>
+                <li><a href="../../accounts/logout"><i class="material-icons left">login</i>Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {% endif %}
+
+    
+    <ul class="sidenav nav-expanded" id="mobile-demo">
+        <li><a href="login.html"><i class="material-icons left">login</i>Cerrar sesión</a></li>
+    </ul>
+
+    <script>
+           document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances =  M.AutoInit();
+        });
+
+        // Or with jQuery
+
+        $(document).ready(function(){
+            $('.sidenav').sidenav();
+        });
+      
+    </script>
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script  src="{% static '/materialize.js' %}"></script>
+</html>

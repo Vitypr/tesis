@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cuota</title>
+        <script type="text/javascript">
+            function valideKey(evt){
+                
+                // code is the decimal ASCII representation of the pressed key.
+                var code = (evt.which) ? evt.which : evt.keyCode;
+                
+                if(code==8) { // backspace.
+                  return true;
+                } else if(code>=48 && code<=57) { // is a number.
+                  return true;
+                } else{ // other keys.
+                  return false;
+                }
+            }
+        </script>
+        <script>
+            
+            function filterFloat(evt,input)
+            {
+                // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
+                var key = window.Event ? evt.which : evt.keyCode;    
+                var chark = String.fromCharCode(key);
+                var tempValue = input.value+chark;
+                if(key >= 48 && key <= 57){
+                    if(filter(tempValue)=== false){
+                        return false;
+                    }else{       
+                        return true;
+                    }
+                }else{
+                    if(key == 8 || key == 13 || key == 0) {     
+                        return true;              
+                    }else if(key == 46){
+                            if(filter(tempValue)=== false){
+                                return false;
+                            }else{       
+                                return true;
+                            }
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            function filter(__val__)
+            {
+                var preg = /^([0-9]+\.?[0-9]{0,2})$/; 
+                if(preg.test(__val__) === true){
+                    return true;
+                }else{
+                return false;
+                }
+                
+            }
+    
+        </script>
+    </head>
+    {% include "navbar.html" %}
+    <body>
+        <div class="container">
+            {% for cuota in cuota %}
+            <div class="row">        
+                    <h4 align="center"><p>La cuota que fue asignada automaticamente al aspirante fue de ${{cuota.cuota_estudiante}}. Por favor revise el estudio socioeconomico que lleno el aspirante.
+                        Una ves lo haya revisado, puede elegir entre aprobar la cuota que ya fue asignada o editarla para luego aprobarla.
+                    </p></h4>
+                    <form action="../actualizar_cuota/" method="POST">
+                        {% csrf_token %}
+                        <div class="row" >
+                            <div class="input-field col s6 center">
+                                <input type="text" name="cuota_estudiante" value="{{cuota.cuota_estudiante}}" onkeypress="return filterFloat(event,this);">
+                                <label>Cuota</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input value="{{ id }}" type="text" name="id" id="id" hidden readonly>
+                               
+                            </div>
+                            
+                        </div>
+                    
+                
+                        <button class="btn waves-effect waves-light" type="submit" name="ImageData">Aprobar cuota
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </form>
+                {% endfor %}
+                
+            </div>
+        </div>
+        
+    </body>
+</html>
